@@ -1,0 +1,36 @@
+.homePage {
+    max-width: 1300px;
+    margin: 1rem auto;
+}
+
+.homePage_title {
+    font-size: 1.5rem;
+    color: var(--main_blue);
+    margin-bottom: 1rem;
+    margin-right: 8px;
+}
+
+.homePage__products {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* gap: 1.5rem; */
+}
+
+
+@media (max-width: 1232px) {
+    .homePage__products {
+      grid-template-columns: repeat(3, auto);
+    }
+  }
+  
+  @media (max-width: 950px) {
+    .homePage__products {
+      grid-template-columns: repeat(2, auto);
+    }
+  }
+  
+  @media (max-width: 630px) {
+    .homePage__products {
+      grid-template-columns: 1fr;
+    }
+  }

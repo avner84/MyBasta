@@ -1,13 +1,364 @@
-body {
+* {
+  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  direction: rtl;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #F4F4F4;
+}
+
+img {
+  width: 100%;
+  object-fit: contain;
+}
+
+
+/* ====== CSS FOR FROMS */
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+.wrapper {
+  max-width: 350px;
+  width: 100%;
+  margin: 30px auto 0;
+  padding: 10px;
+}
+
+.wrapper .form_container {
+  background: #fff;
+  padding: 10px 30px;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+
+.heading {
+  background: var(--main_orange);
+  margin: -30px;
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.heading h2 {
+  font-size: 15px;
+}
+
+.form_item>label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.wrapper .form_container .form_item {
+  margin-bottom: 8px;
+}
+
+small {
+  margin-bottom: 11px;
+  font-size: 12px;
+}
+
+.form_wrap.fullname,
+.form_wrap.select_box {
+  display: flex;
+}
+
+.form_wrap.fullname .form_item,
+.form_wrap.select_box .form_item {
+  width: 50%;
+}
+
+.form_wrap.fullname .form_item:first-child,
+.form_wrap.select_box .form_item:first-child {
+  margin-right: 4%;
+}
+
+.wrapper .form_container .form_item label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form_item input[type='text'],
+.form_item input[type='email'],
+.form_item input[type='password'],
+.form_item input[type='number'] {
+  width: 100%;
+  padding: 10px;
+  font-size: 12px;
+  border: 1px solid #dadce0;
+  border-radius: 3px;
+}
+
+.form_item select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #dadce0;
+  border-radius: 3px;
+}
+
+.btn input[type="submit"] {
+  background: var(--main_blue);
+  border: 3px solid var(--border_btn);
+  padding: 10px;
+  width: 100%;
+  font-size: 14px;
+  letter-spacing: 1px;
+  border-radius: 3px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.btn input[type="submit"]:hover {
+  opacity: 0.8;
+}
+
+.instructions {
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  background: #000;
+  color: #fff;
+  padding: 0.25rem;
+  position: relative;
+  bottom: -10px;
+}
+
+.instructions>svg {
+  margin-right: 0.25rem;
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+.hide {
+  display: none;
+}
+
+.valid {
+  color: limegreen;
+  margin-left: 0.25rem;
+}
+
+.invalid {
+  color: red;
+  margin-left: 0.25rem;
+}
+
+.errmsg {
+  background-color: lightpink;
+  color: firebrick;
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.line {
+  display: inline-block;
+}
+
+
+.instructions {
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  background: #000;
+  color: #fff;
+  padding: 0.25rem;
+  position: relative;
+  bottom: -10px;
+}
+
+.instructions>svg {
+  margin-right: 0.25rem;
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+.hide {
+  display: none;
+}
+
+.valid {
+  color: limegreen;
+  margin-left: 0.25rem;
+}
+
+.invalid {
+  color: red;
+  margin-left: 0.25rem;
+}
+
+.errmsg {
+  background-color: lightpink;
+  color: firebrick;
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.line {
+  display: inline-block;
+}
+
+input[type="submit"][disabled] {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.fogate_pass_wrap p {
+  color: var(--main_blue);
+  margin-top: 20px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.fogate_pass_wrap a {
+  text-decoration: none;
+  color: var(--main_blue)
+}
+
+.fogate_pass_wrap p:nth-child(2) {
+  margin-top: 8px;
+}
+
+/* =================== */
+
+.success_warp h3 {
+  color: var(--main_blue);
+  margin: 30px 0px;
+}
+
+.success_warp p {
+  margin-bottom: 8px;
+}
+
+.success_warp {
+  padding-bottom: 30px;
+}
+
+.deleteUserAccountBtn {
+  background: red;
+  border: 3px solid pink;
+  padding: 10px;
+  width: 100%;
+  font-size: 14px;
+  letter-spacing: 1px;
+  border-radius: 3px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.deleteUserAccountBtn:hover {
+  opacity: 0.8;
+}
+
+.deleteUserAccountBtn_warp {
+  margin-top: 30px;
+}
+
+/* ============ DeleteAccountModal======= */
+
+.DeleteAccountModalTitle {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.DeleteAccountModalBtns {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.DeleteAccountModalBtns button {
+  margin-top: 10px;
+  width: 80px;
+  padding: 10px;
+  font-size: 12px;
+  border: 1px solid #dadce0;
+  border-radius: 3px;
+
+}
+
+.DeleteAccountModalBtns button:hover {
+  cursor: pointer;
+  background-color: azure;
+  font-weight: 700;
+}
+
+/* =================== */
+
+.account_delete_div {
+  padding: 50px 0px;
+  text-align: center;
+}
+
+.success_warp {
+  text-align: center;
+}
+
+/* =================== */
+.signinLink {
+  margin-left: 30px;
+}
+
+/* =====OrderItem:====== */
+
+.orderItem {
+  width: 100%;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr 1fr 2fr;
+  gap: 8px;
+  background: #fff;
+  border-radius: 2px;
+  place-items: center;
+  margin-bottom: 8px;
+}
+
+.orderItem__title {
+  text-decoration: none;
+  color: var(--main_blue);
+  font-weight: bold;
+}
+
+.orderItem__image{
+  width: 100%;
+  height: 170px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.orderItem__TotalPrice{
+  color: var(--main_orange);
+  font-weight: bold;
+}
+
+
+@media (max-width: 700px) {
+  .orderItem__title {
+    font-size: 0.8rem;
+  }
+  
+  .orderItem__price {
+      font-size: 0.8rem;
+    }
+}
+
+/* =========== */
+
+
+.form_container >h2, p {
+  text-align: center;
+}
+
+.form_container > p{
+  margin-top: 20px;
 }

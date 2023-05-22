@@ -1,0 +1,67 @@
+/* .wrapper{
+    max-width: 450px;
+    width: 100%;
+    margin: 30px auto 0;
+    padding: 10px;
+  }
+  .wrapper .form_container{
+    background: #fff;
+    padding: 30px;
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+  }
+
+  .heading{
+    background: var(--main_orange);
+    margin: -30px;
+    text-align: center;
+    color: white;
+    font-size: 19px;
+    margin-bottom: 35px;
+    padding: 10px;
+  }
+
+  .wrapper .form_container .form_item{
+    margin-bottom: 25px;
+  }
+  
+  
+  
+  .wrapper .form_container .form_item label{
+    display: block;
+    margin-bottom: 5px;
+  }
+  .form_item input[type='text'],
+  .form_item input[type='password']{
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #dadce0;
+    border-radius: 3px;
+  }
+  
+
+  .btn input[type="submit"]{
+    background:var(--main_blue);
+    border: 3px solid var(--border_btn);
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+    letter-spacing: 1px;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #fff;
+  }
+
+  .btn input[type="submit"]:hover{
+    opacity: 0.8;
+  }
+
+  .fogate_pass_wrap{
+    margin-top: 25px;
+  }
+
+  .fogate_pass_wrap a {
+    text-decoration: none;
+    color: var(--main_blue)
+  } */
