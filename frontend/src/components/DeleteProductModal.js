@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchProducts } from '../redux/productsActions';
 import axios from '../api/axios';
+import {getCookie} from '../api/CookiesMethodes';
 
 const DELETE_PRODUCT_URL = '/api/products/deleteProduct';
 
@@ -43,15 +44,7 @@ const DeleteProductModal = ({ setShowDeleteProductModal, setProductIdForDelete, 
     };
 
 
-    function getCookie(name) {
-        const value = "; " + document.cookie;
-        const parts = value.split("; " + name + "=");
-        if (parts.length === 2) {
-          return parts.pop().split(";").shift();
-        }
-      }
-
-
+   
     const handleCancel = () => {
         setShowDeleteProductModal(false);
     };

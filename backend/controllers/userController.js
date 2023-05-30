@@ -1,102 +1,56 @@
-const bcrypt = require('bcrypt');
-const User = require("../models/User");
+const userValidations = require('../validations/userValidations');
+const user_operations = require('../db-service/user_operations');
 
-async function findUser(email) {
-    try {
-        const existingUser = await User.findOne({ email });
-        return existingUser;
-    } catch (error) {
-        throw new Error(`An error occurred while finding user by email ${email}: ${error}`);
-    }
-}
+async function deleteUser(req, res) {
+    const { email } = req.body;
 
-
-async function createUser(firstName, lastName, email, pwd) {
-    try {
-        let lowerCaseEmail = email.toLowerCase();
-        const newUser = await User.create({
-            name: {
-                firstName,
-                lastName,
-            },
-            email: lowerCaseEmail,
-            password: await bcrypt.hash(pwd, 10),
-        });
-
-        const { password, ...others } = newUser._doc;
-        return others;
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-   
-}
-
-async function deleteUser(email){
-
-    try {
-        const user = await User.findOneAndUpdate(
-            { email },
-            { isDeleted: true },
-            { new: true }
-            ).exec();
-       return user;
-    } catch (err) {
-        console.error(err);
-        throw err;
+    //validation:
+    const validationErrorUserEmail = userValidations.validUserEmail(email);
+    if (validationErrorUserEmail) {
+        console.log(validationErrorUserEmail);
+        return res.status(400).send(validationErrorUserEmail);
     }
 
-}
-
-async function userDeleteByServer(email) {
     try {
-        const user = await deleteUser(email);
-
+        const user = await user_operations.deleteUser(email);
         if (!user) {
-            return { error: "No user found" };
+            return res.status(404).send('לא נמצא משתמש למחיקה');
         }
-
         const { password, ...others } = user._doc;
-        console.log("others :", others);
-        return "delete Successful";
-    } catch (err) {
-        console.log(err);
-        return err;
+        console.log('others :', others);
+        return res.status(200).json(others);
+    } catch (error) {
+        console.error(err);
+        return res.status(500).send('שגיאת שרת פנימית');
     }
 }
 
+async function editUser(req, res){
+    const { firstName, lastName, email, pwd } = req.body;
 
-async function deleteUserIfInactive(newUser) {
-console.log('newUser :', newUser);
+    // Validate user inputs
+    const validationErrorUser = userValidations.validate_UserDetails( firstName, lastName, pwd);
+    if (validationErrorUser) {
+        console.log(validationErrorUser);
+        return res.status(400).send(validationErrorUser);
+    }
+    
+   
     try {
-        const user = await findUser(newUser.email)
-
-        if (!user) { throw error }
-        if (user.isActive === false) {
-            const resultUserDeleteByServer = await userDeleteByServer(newUser.email)
-            console.log('resultUserDeleteByServer :', resultUserDeleteByServer);
+        const updatedUser = await user_operations.editUser(firstName, lastName, email, pwd);
+     
+        if (!updatedUser) {
+            return res.status(404).send('לא נמצא משתמש לעדכון');
         }
+     
+        return res.status(200).json(updatedUser);
 
-    } catch (error) {
-        console.log(error);
-    }
+    } catch (err) {
 
-}
+        console.error(err);
+        return res.status(500).send('שגיאת שרת פנימית');
 
-async function editUser(firstName, lastName, email, pwd){
-    try {
-        const updatedUser = await User.findOneAndUpdate(
-            { email },
-            { name: { firstName, lastName }, password: await bcrypt.hash(pwd, 10) },
-            { new: true }
-        ).exec();
-
-        const { password, ...others } = updatedUser._doc;
-        return others;
-    } catch (error) {
-        console.error(error);
-        throw error;
     }
 }
 
-module.exports = { createUser, findUser, deleteUserIfInactive, deleteUser, editUser }
+module.exports = { deleteUser, editUser}

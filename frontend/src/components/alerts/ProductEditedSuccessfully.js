@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+// Component for displaying the product edit success message
 const ProductEditedSuccessfully = () => {
   return (
     <div className='form_container'>

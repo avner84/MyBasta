@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+//// Component for displaying the confirmed account alert
 const ConfirmedAccountAlert = () => {
     return (
         <div className='form_container'>

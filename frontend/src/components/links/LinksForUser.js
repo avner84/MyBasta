@@ -2,7 +2,6 @@ import { useDispatch } from 'react-redux';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/userSlice';
-//import { emptyCart } from '../../redux/cartSlice';
 
 
 const LinkForUser = () => {
@@ -12,9 +11,10 @@ const LinkForUser = () => {
 
   const logoutHandler = () => {
     dispatch(logout());
-    //dispatch(emptyCart())
+    
     //During disconnection, an authenticated user cookie is deleted:
     document.cookie = "loginVerification=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    // Navigating back to the home page after logout
     navigate("/");
   };
   return (

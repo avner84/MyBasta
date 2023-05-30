@@ -32,7 +32,7 @@ const cartSlice = createSlice({
                 state.cartProducts.push(newProduct);
             }
 
-            //=====
+            // Calculate the total amount and price
             let amount = 0;
             let total = 0;
             state.cartProducts.forEach((product) => {
@@ -42,6 +42,7 @@ const cartSlice = createSlice({
             state.totalAmount = amount;
             state.totalPrice = total;
 
+            // Call the API to update the cart in the database
             const userId = state.userId;
             const totalAmount = state.totalAmount;
             const totalPrice = state.totalPrice;
@@ -60,6 +61,8 @@ const cartSlice = createSlice({
 
             if (existingProduct) {
                 existingProduct.amount = quantity;
+
+                // Recalculate the total amount and price
                 let amount = 0;
                 let total = 0;
                 state.cartProducts.forEach((product) => {
@@ -70,7 +73,7 @@ const cartSlice = createSlice({
                 state.totalPrice = total;
 
             }
-
+            // Call the API to update the cart in the database
             const userId = state.userId;
             const totalAmount = state.totalAmount;
             const totalPrice = state.totalPrice;
@@ -81,6 +84,7 @@ const cartSlice = createSlice({
             const productId = action.payload;
             state.cartProducts = state.cartProducts.filter(product => product._id !== productId);
             if (state.cartProducts.length > 0) {
+                // Recalculate the total amount and price if there are remaining products
                 let amount = 0;
                 let total = 0;
                 state.cartProducts.forEach((product) => {
@@ -92,9 +96,11 @@ const cartSlice = createSlice({
             }
 
             else {
+                // Reset the total amount and price if the cart is empty
                 state.totalAmount = 0;
                 state.totalPrice = 0;
             }
+            // Call the API to update the cart in the database
             const userId = state.userId;
             const totalAmount = state.totalAmount;
             const totalPrice = state.totalPrice;
@@ -107,13 +113,13 @@ const cartSlice = createSlice({
             state.totalPrice = action.payload.totalPrice;
             state.cartProducts = action.payload.cartProducts;
 
-           
+
         },
         emptyCart: (state) => {
             state.cartProducts = [];
             state.totalAmount = 0;
             state.totalPrice = 0;
-           
+
 
             const userId = state.userId;
             const totalAmount = state.totalAmount;

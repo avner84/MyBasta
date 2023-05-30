@@ -1,66 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const authUser = require('../middleware/authUser');
-const orderController = require('../controllers/orderController');
-const ordersValidations = require('../validations/ordersValidations')
+const { createPayment, executePayment, updateOrderInDBHandler, fetchOrdersFromDBHandler } = require('../controllers/orderController');
+const ordersValidations = require('../validations/ordersValidations');
 
+// Route for initiating the payment process (requires authentication)
+router.post('/pay', authUser.checkAuthHeader, createPayment);
 
-router.post('/pay', authUser.checkAuthHeader, orderController.createPayment);
+// Route for handling successful payment execution
+router.get('/success', executePayment);
 
-router.get('/success', orderController.executePayment);
-
+// Route for handling cancelled payment
 router.get('/cancel', (req, res) => res.send('Cancelled'));
 
+// Route for updating the order in the database (requires authentication)
+router.post("/updateOrderInDB", authUser.checkAuthHeader, updateOrderInDBHandler);
 
-router.post("/updateOrderInDB", authUser.checkAuthHeader, async (req, res) => {
-    const { orders, userId } = req.body;
-    console.log('userId :', userId);
-    console.log('orders :', orders);
-
-    //Validation:
-
-    const validationError = ordersValidations.validateOrders(orders, userId);
-    if (validationError) {
-        console.log(validationError);
-        return res.status(400).send(validationError);
-    }
-
-    try {
-        const updateOrders = await orderController.updateOrdersInDB(
-            orders,
-            userId
-        );
-        res.status(200).json(updateOrders);
-    } catch (error) {
-        res.status(500).send(error.message || "שגיאת שרת פנימית");
-    }
-});
-
-router.get("/fetchOrdersFromDB", async (req, res) => {
-
-    const userId = req.query["userId"];
-
-    //Validation:
-    const validationErrorUsertId = ordersValidations.validUserId(userId);
-    if (validationErrorUsertId) {
-        console.log(validationErrorUsertId);
-        return res.status(400).send(validationErrorUsertId);
-    }
-
-    try {
-
-        const orderDetails = await orderController.fetchOrders(userId);
-        console.log('orders :', orderDetails);
-
-
-        return res.status(200).json(orderDetails);
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: "Server Error" });
-    }
-});
-
+// Route for fetching orders from the database
+router.get("/fetchOrdersFromDB", fetchOrdersFromDBHandler);
 
 module.exports = router;
-
-

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+// Component for displaying the alert message when the user is not logged in
 const UserNotLoggedIn = () => {
     return (
         <div className='form_container'>

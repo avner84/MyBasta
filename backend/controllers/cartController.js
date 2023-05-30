@@ -1,70 +1,52 @@
-const Cart = require("../models/Cart");
+const cart_operations = require('../db-service/cart_operations');
+const cartValidations = require('../validations/cartValidations');
 
-const updateCartInDB = async (cartProducts, userId, totalAmount, totalPrice) => {
-  try {
-    const existingCart = await Cart.findOne({ userId });
+async function updateCartInDBHandler(req, res){
+    const { cartProducts, userId, totalAmount, totalPrice } = req.body;
 
-    if (!existingCart) {
-      const newCart = await Cart.create({
+    //Validation:
+  const validationError = cartValidations.validateCart(cartProducts, totalAmount, totalPrice, userId);
+  if (validationError) {
+      console.log(validationError);
+      return res.status(400).send(validationError);
+  }
+    
+     
+    try {
+      const updatedCart = await cart_operations.updateCartInDB(
         cartProducts,
         userId,
         totalAmount,
-        totalPrice,
-      });
-
-      return newCart;
+        totalPrice
+      );
+  
+      res.status(200).json(updatedCart);
+    } catch (error) {
+        console.error(error);
+      res.status(500).send(error.message || "שגיאת שרת פנימית");
     }
+}
 
-    const updatedCart = await Cart.findOneAndUpdate(
-      { userId },
-      { cartProducts, totalAmount, totalPrice },
-      { new: true }
-    );
+async function fetchCartFromDBHandler(req, res){
+ 
+    const userId = req.query["userId"];
 
-    return updatedCart;
-  } catch (error) {
-    throw new Error(error.message || "שגיאת שרת פנימית");
-  }
-};
-
-
-
-
-const fetchCart = async (userId) => {
-  try {
-    const existingCart = await Cart.findOne({ userId });
-
-    let cart = {};
-
-    if (existingCart) {
-      //For some reason, the database stores the shopping cart as an object with numeric keys instead of an array of objects, so to get back to normal the next loop turns the shopping cart back into an array:
-      let arr = [];
-      for (let key in existingCart.cartProducts[0]) {
-        arr[key] = existingCart.cartProducts[0][key];
-      }
-
-      cart = {
-        cartProducts: arr,
-        userId: existingCart.userId,
-        totalAmount: existingCart.totalAmount,
-        totalPrice: existingCart.totalPrice,
-      };
-    } else {
-      cart = {
-        cartProducts: [],
-        userId: userId,
-        totalAmount: 0,
-        totalPrice: 0,
-      };
+    //Validation:
+    const validationErrorUsertId = cartValidations.validUserId(userId);
+    if (validationErrorUsertId) {
+        console.log(validationErrorUsertId);
+        return res.status(400).send(validationErrorUsertId);
     }
+  
+    try {  
+      const cart = await  cart_operations.fetchCart(userId);
+      console.log("cart :", cart);
+  
+      return res.status(200).json(cart);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Server Error" });
+    }   
+}
 
-    return cart;
-  } catch (error) {
-    console.error(error);
-    throw new Error("Server Error");
-  }
-};
-
-module.exports = {
-  updateCartInDB, fetchCart
-};
+module.exports={updateCartInDBHandler, fetchCartFromDBHandler}

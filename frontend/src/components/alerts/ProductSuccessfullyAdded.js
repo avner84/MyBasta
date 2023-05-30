@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 
+
+// Component for displaying the product addition success message
 const ProductSuccessfullyAdded = () => {
   return (
     <div className='form_container'>

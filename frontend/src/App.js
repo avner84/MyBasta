@@ -26,6 +26,7 @@ import ProductEditedSuccessfully from './components/alerts/ProductEditedSuccessf
 import UserNotLoggedIn from './components/alerts/UserNotLoggedIn';
 import OrdersPage from './pages/OrdersPage';
 import PaymentSuccessfulPage from './pages/PaymentSuccessfulPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
 
@@ -57,7 +58,7 @@ function App() {
             <Route exact path='/ProductDeletedSuccessfully' element={<AlertsPages alert={<ProductDeletedSuccessfully/>} />} />
             <Route exact path='/productEditedSuccessfully' element={<AlertsPages alert={<ProductEditedSuccessfully/>} />} />
             <Route exact path='/userNotLoggedIn' element={<AlertsPages alert={<UserNotLoggedIn/>} />} />
-            
+            <Route path="*" element={<NotFoundPage/> } />
                    
           </Routes>
         </main>

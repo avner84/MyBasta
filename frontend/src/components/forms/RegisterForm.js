@@ -9,9 +9,9 @@ import { FIRST_NAME_REGEX, LAST_NAME_REGEX, EMAIL_REGEX, PWD_REGEX } from '../..
 
 const REGISTER_URL = '/api/auth/register';
 
-const RegisterForm = ({setSuccess}) => {
+const RegisterForm = ({ setSuccess }) => {
 
-
+    // State variables for form inputs and validation
     const [firstName, setFirstName] = useState('');
     const [validFirstName, setvalidFirstName] = useState(false);
 
@@ -27,17 +27,17 @@ const RegisterForm = ({setSuccess}) => {
     const [matchPwd, setMatchPwd] = useState('');
     const [validMatch, setValidMatch] = useState(false);
 
-    const [errMsg, setErrMsg] = useState('');    
+    const [errMsg, setErrMsg] = useState('');
 
 
-
+    // useEffect hooks for validating form inputs
     useEffect(() => {
-        const result = FIRST_NAME_REGEX.test(firstName)        
+        const result = FIRST_NAME_REGEX.test(firstName)
         setvalidFirstName(result);
     }, [firstName])
 
     useEffect(() => {
-        const result = LAST_NAME_REGEX.test(lastName)        
+        const result = LAST_NAME_REGEX.test(lastName)
         setValidLastName(result);
     }, [lastName])
 
@@ -57,6 +57,7 @@ const RegisterForm = ({setSuccess}) => {
         setErrMsg('');
     }, [firstName, lastName, email, pwd, matchPwd])
 
+    // Function to handle form submission
     const hundlesubmit = async (e) => {
         e.preventDefault();
         // if button enabled with JS hack
@@ -79,15 +80,15 @@ const RegisterForm = ({setSuccess}) => {
             console.log(response.data);
             console.log(response.accessToken);
             console.log(JSON.stringify(response))
-            setSuccess(true);
-            //clear state and controlled inputs
-            //need value attrib on inputs for this
+            setSuccess(true); // When setSuccess receives true, the parent component (RegisterPage) will render the SuccessRegister component instead of the registration form
+            
+            // Clear form inputs and state variables
             setFirstName('');
             setLastName('');
             setEmail('');
             setPwd('');
             setMatchPwd('');
-            //Add an ALERT or MODAL message that the registration was successful and direct the user to an email to verify the account
+            
         }
         catch (err) {
             if (!err?.response) {
@@ -95,7 +96,7 @@ const RegisterForm = ({setSuccess}) => {
             }
             else if (err.response?.status === 409) {
                 setErrMsg('כבר נרשם חשבון עם כתובת דוא"ל זו');
-            } 
+            }
             else if (err.response?.status === 400) {
                 setErrMsg('לפחות אחד השדות שהוזנו לא הוזן באופן תקין');
             }

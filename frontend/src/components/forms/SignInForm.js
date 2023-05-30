@@ -6,10 +6,10 @@ import { useDispatch } from 'react-redux'
 import { login } from "../../redux/authSlice";
 import { loginStart, loginSuccess, loginFailure } from '../../redux/userSlice';
 import { setCartProducts } from '../../redux/cartSlice'
-import {setOrders} from '../../redux/ordersSlice'
+import { setOrders } from '../../redux/ordersSlice'
 import axios from "../../api/axios";
 import { FetchCartFromDB } from '../../api/FetchCartFromDB';
-import {FetchOrdersFromDB} from '../../api/FetchOrdersFromDB';
+import { FetchOrdersFromDB } from '../../api/FetchOrdersFromDB';
 
 const LOGIN_URL = '/api/auth/login'
 
@@ -28,6 +28,7 @@ const SignInForm = ({ loginHandler }) => {
         setErrMsg('');
     }, [email, pwd])
 
+    // Handling form submission
     const hundlesubmit = async (e, history) => {
         e.preventDefault();
         dispatch(loginStart());
@@ -44,21 +45,23 @@ const SignInForm = ({ loginHandler }) => {
             const user = response.data;
             console.log('user :', user);
 
-            dispatch(login());
-            dispatch(loginSuccess(user));
+            dispatch(login()); // Updates the state to indicate that a user is logged in, so that state.isAuthenticated will be changed to true (relevant mainly for the information displayed to the user)
+            dispatch(loginSuccess(user)); // Updates the state with the details of the logged-in user
 
+            // Clearing email and password fields
             setEmail('');
             setPwd('');
             navigate("/");
+
+            // Fetching cart and orders data from the database using custom API functions
             const cartForReduxStore = await FetchCartFromDB(user._id);
-            console.log('=========================');
             console.log('cartForReduxStore :', cartForReduxStore);
             dispatch(setCartProducts(cartForReduxStore))
             const ordersForReduxStore = await FetchOrdersFromDB(user._id);
             dispatch(setOrders(ordersForReduxStore));
         } catch (err) {
 
-
+// Handling different types of errors
             if (!err?.response) {
                 setErrMsg('אין תשובה מהשרת');
                 dispatch(loginFailure('אין תשובה מהשרת'));

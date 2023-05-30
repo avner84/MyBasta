@@ -1,13 +1,16 @@
 const paypal = require('paypal-rest-sdk');
 const dotenv = require('dotenv').config();
-const Orders = require("../models/Orders");
+const ordersValidations = require('../validations/ordersValidations');
+const order_operations = require('../db-service/order_operations')
 
+// Configure PayPal SDK
 paypal.configure({
     'mode': 'sandbox', //sandbox or live
     'client_id': process.env.CLIENT_ID,
     'client_secret': process.env.SECRET_ID
 });
 
+// Create payment with PayPal
 const createPayment = async (req, res) => {
     try {
         console.log("req.body: ", req.body);
@@ -62,6 +65,8 @@ const createPayment = async (req, res) => {
     }
 };
 
+// Execute payment with PayPal
+
 const executePayment = async (req, res) => {
     try {
         const payerId = req.query.PayerID;
@@ -92,60 +97,60 @@ const executePayment = async (req, res) => {
     }
 };
 
-//=====
+// Update orders in the database
+async function updateOrderInDBHandler(req, res){
+    const { orders, userId } = req.body;
+    console.log('userId :', userId);
+    console.log('orders :', orders);
 
-const updateOrdersInDB = async (orders, userId) => {
+    //Validation:
+
+    const validationError = ordersValidations.validateOrders(orders, userId);
+    if (validationError) {
+        console.log(validationError);
+        return res.status(400).send(validationError);
+    }
+
     try {
-        const existingOrders = await Orders.findOne({ userId });
-
-        if (!existingOrders) {
-            const newOrders = await Orders.create({
-                userId,
-                orders
-            });
-
-            return newOrders;
-        }
-
-        const updatedOrders = await Orders.findOneAndUpdate(
-            { userId },
-            { orders },
-            { new: true }
+        const updateOrders = await order_operations.updateOrdersInDB(
+            orders,
+            userId
         );
-
-        return updatedOrders;
+        res.status(200).json(updateOrders);
     } catch (error) {
-        throw new Error(error.message || "שגיאת שרת פנימית");
+        res.status(500).send(error.message || "שגיאת שרת פנימית");
     }
-};
-
-
-const fetchOrders = async (userId) => {
-    try {        
-        let existingOrders = await Orders.findOne({ userId });
-
-        if (existingOrders) {
-            return existingOrders;
-        }
-        else {
-            return existingOrders = {
-                orders: [],
-                userId: userId,
-            }
-        }
-
-    } catch (error) {
-        console.error(error);
-        throw new Error("Server Error");
-    }
-
 }
 
 
+// Fetch orders from the database
+async function fetchOrdersFromDBHandler(req, res){
+
+    const userId = req.query["userId"];
+
+    //Validation:
+    const validationErrorUsertId = ordersValidations.validUserId(userId);
+    if (validationErrorUsertId) {
+        console.log(validationErrorUsertId);
+        return res.status(400).send(validationErrorUsertId);
+    }
+
+    try {
+
+        const orderDetails = await order_operations.fetchOrders(userId);
+        console.log('orders :', orderDetails);
+
+
+        return res.status(200).json(orderDetails);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Server Error" });
+    }
+}
 
 module.exports = {
     createPayment,
     executePayment,
-    updateOrdersInDB,
-    fetchOrders
+    updateOrderInDBHandler,
+    fetchOrdersFromDBHandler
 };

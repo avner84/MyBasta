@@ -6,18 +6,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../api/axios';
 import { fetchProducts } from '../../redux/productsActions';
-
+import {getCookie} from '../../api/CookiesMethodes';
 import {PRODUCT_TֹTITLE_REGEX, PRODUCT_DESCRIPTION_REGEX, PRODUCT_PRICE_REGEX, PRODUCT_CATEGORY_REGEX} from '../../validation-forms/regexConstants';
 
 const  CREATE_PRODUCT_URL = '/api/products/createProduct';
-
-function getCookie(name) {
-    const value = "; " + document.cookie;
-    const parts = value.split("; " + name + "=");
-    if (parts.length === 2) {
-        return parts.pop().split(";").shift();
-    }
-}
 
 const ProductUploadForm = () => {
     
@@ -25,6 +17,7 @@ const ProductUploadForm = () => {
     const navigate = useNavigate();
     const user= useSelector((state)=>state.user.currentUser);
 
+    // State variables for the form inputs
     const [productTitle, setProductTitle] = useState('');
     const [validProductTitle, setvalidProductTitle] = useState(false);
 
@@ -39,30 +32,35 @@ const ProductUploadForm = () => {
 
     const [errMsg, setErrMsg] = useState(''); 
 
+    // Validate product title when it changes
     useEffect(() => {
         const result = PRODUCT_TֹTITLE_REGEX.test(productTitle)
         setvalidProductTitle(result);
     }, [productTitle])
 
+    // Validate product description when it changes
     useEffect(() => {
         const result = PRODUCT_DESCRIPTION_REGEX.test(productDescription)
         setValidProductDescription(result);
     }, [productDescription])
 
+    // Validate price when it changes
     useEffect(() => {
         const result = PRODUCT_PRICE_REGEX.test(price)
         setValidPrice(result);
     }, [price])
 
+     // Validate category when it changes
     useEffect(() => {
         const result = PRODUCT_CATEGORY_REGEX.test(category)
         setValidCategory(result);
     }, [category])
 
+     // Handle form submission
     const hundlesubmit = async (e) => {
         e.preventDefault();
 
-         // if button enabled with JS hack
+         // // Validate all input fields using JavaScript hack
          const v1 = PRODUCT_TֹTITLE_REGEX.test(productTitle);
          const v2 = PRODUCT_DESCRIPTION_REGEX.test(productDescription);
          const v3 = PRODUCT_PRICE_REGEX.test(price);
@@ -72,7 +70,7 @@ const ProductUploadForm = () => {
              return;
          }
 
-        
+        // Create form data
         const data = new FormData();        
         data.append('title', productTitle);
         data.append('description', productDescription);
@@ -82,7 +80,8 @@ const ProductUploadForm = () => {
         data.append('file', e.target[4].files[0]);
         
         try {
-           const loginVerificationToken = getCookie("loginVerification"); 
+           const loginVerificationToken = getCookie("loginVerification");
+           // Send POST request to create product 
             const response = await axios.post(CREATE_PRODUCT_URL, data, {
                 headers: { 
                     'Content-Type': ' multipart/form-data',
@@ -91,6 +90,7 @@ const ProductUploadForm = () => {
             });
             console.log('Success:', response);
 
+            // Reset form inputs and fetch updated products
             setProductTitle('');
             setProductDescription('');
             setPrice(0);

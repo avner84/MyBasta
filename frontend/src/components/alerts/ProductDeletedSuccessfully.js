@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+// Component for displaying the product deletion success message
 const ProductDeletedSuccessfully = () => {
   return (
     <div className="wrapper">

@@ -25,7 +25,7 @@ function CartPage() {
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data);
-          setShowSuccessAlert(true); // מציג את ההודעה כאשר התשלום בוצע בהצלחה
+          setShowSuccessAlert(true); 
           window.location = res.data.forwardLink;
         }
       })
@@ -74,3 +74,16 @@ function CartPage() {
 }
 
 export default CartPage
+
+
+// The CartPage component represents the shopping cart page.
+
+// It retrieves the cartProducts, totalAmount, and totalPrice from the Redux store using the useSelector hook.
+
+// The component manages the state of showSuccessAlert, which controls whether to display a success message after successful payment.
+
+// When the user clicks the "מעבר לתשלום" (Proceed to Payment) button, the handlePayBtn function is called. It sends a POST request to the PAY_URL endpoint, including the cartProducts, totalAmount, and totalPrice in the request payload. The request is authenticated by adding the loginVerificationToken to the request headers.
+
+// If the payment request is successful (status code 200), the success message is displayed, and the user is redirected to the forwardLink received in the response.
+
+// If the cart is empty, a message indicating that the cart is empty is shown.

@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Component for displaying the alert message when the account confirmation fails
 const UnconfirmedAccountAlert = () => {
   return (
     <div className='form_container'>

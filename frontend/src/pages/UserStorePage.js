@@ -6,15 +6,20 @@ import { useSelector } from 'react-redux';
 import DeleteProductModal from '../components/DeleteProductModal';
 
 const UserStorePage = () => {
-
+// Retrieve products and user information from the Redux store
   const products = useSelector((state) => state.products.products);
   const user = useSelector((state) => state.user.currentUser);
+
+  // Filter the products based on the current user as the seller
   const userProduct = products.filter(product => product.selerId === user._id);
+
+  // State for controlling the display of the delete product modal
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
   const [productIdForDelete, setProductIdForDelete] = useState("");
 
   return (
     showDeleteProductModal?
+     // Render the delete product modal if showDeleteProductModal is true
     <DeleteProductModal setShowDeleteProductModal={setShowDeleteProductModal} setProductIdForDelete={setProductIdForDelete} productId={productIdForDelete} />
     :
     (<div className='userStorePage'>

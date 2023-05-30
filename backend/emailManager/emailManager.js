@@ -1,7 +1,8 @@
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv').config();
-nodemailerTransporterPass =  process.env.NODEMAILER_TRANSPORTER_PASS;
+nodemailerTransporterPass = process.env.NODEMAILER_TRANSPORTER_PASS;
 
+// Create a nodemailer transporter using Gmail service
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -15,6 +16,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
+// Function to send an account verification email
 function accountVerificationEmail(destinationAddress, token) {
   let mailOptions = {
     from: '"מיי-בסטה 🛍" <mybasta100@gmail.com>',
@@ -29,6 +31,7 @@ function accountVerificationEmail(destinationAddress, token) {
     </div>`
   };
 
+  // Send the email using the nodemailer transporter
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);

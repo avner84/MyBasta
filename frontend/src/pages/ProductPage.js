@@ -6,27 +6,36 @@ import { useState } from 'react';
 import { addProduct } from '../redux/cartSlice';
 
 const ProductPage = () => {
-
+ // Retrieve products and user information from the Redux store
   const products = useSelector((state) => state.products.products);
   const user = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
 
+    // Extract the product ID from the URL parameters
   const params = useParams();
-
+ 
+  // Find the product with the matching ID from the list of products
   const product = products.find(item => item._id === params.id)
-
+ 
+  // State for the selected quantity of the product
   const [selectedValueOfAmount, setSelectedValue] = useState(1);
 
+    // Handle the change in the selected quantity
   const handleSelectChange = (event) => {
     setSelectedValue(parseInt(event.target.value));
   }
 
   const dispatch = useDispatch();
+
+  // Handler for adding the product to the cart
   const addProductToCartHandler = () => {
+    // Check if the user is logged in
     if (!user) {
+       // If the user is not logged in, navigate to the appropriate page 
       navigate("/userNotLoggedIn");
     }
     else {
+      // Dispatch the addProduct action to add the product to the cart
       dispatch(addProduct({ product, quantity: selectedValueOfAmount, userId: user._id }));
     }
   };

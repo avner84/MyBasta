@@ -13,6 +13,7 @@ import {getCookie} from '../../api/CookiesMethodes';
 
 const EDITING_URL = '/api/user/editing';
 
+// Component for editing user details
 const EditingDetailsForm = ({ setSuccess }) => {
 
     const dispatch = useDispatch();
